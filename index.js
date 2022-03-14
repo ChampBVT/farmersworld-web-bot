@@ -1,5 +1,3 @@
-let isRunning = false;
-
 const utils = {
   async pause(duration) {
     return new Promise((res) => {
@@ -14,9 +12,9 @@ async function farmersWorldBot() {
     const autoRepair = 1;
 
     const repairItem = 50;
-    const energyCondition = 300;
+    const energyCondition = 200;
 
-    const foodFill = 20;
+    const foodFill = 40;
 
     // --------------- Energy ---------------
     if (autoFillEnergy) {
@@ -30,10 +28,14 @@ async function farmersWorldBot() {
         document.querySelector('.resource-energy img').click();
         await utils.pause(1000);
 
-        for (let i = 0; i < foodFill; i += 1) {
+        const foodInputCount = parseInt(document.querySelector('input.modal-input').value, 10);
+
+        const foodsToAdd = (foodFill * 5 - foodInputCount) / 5;
+
+        for (let i = 0; i < foodsToAdd; i += 1) {
           console.log('energy click');
           document.querySelector("img.image-button[alt='Plus Icon']").click();
-          await utils.pause(500);
+          await utils.pause(200);
         }
 
         console.log('modal-wrapper click');
@@ -44,9 +46,7 @@ async function farmersWorldBot() {
     }
     // --------------- Energy ---------------
 
-    for (const [_, item] of document
-      .querySelectorAll('.vertical-carousel-container img')
-      .entries()) {
+    for (const item of document.querySelectorAll('.vertical-carousel-container img')) {
       item.click();
 
       await utils.pause(3e3);
@@ -92,39 +92,18 @@ async function farmersWorldBot() {
           (
             document.querySelector('.modal__button-group .plain-button') ||
             document.querySelector('.modal-stake .modal-stake-close img')
-          ).click();
+          )?.click();
         }
       }
     }
 
     await utils.pause(1e3);
-
-    isRunning = false;
   } catch (error) {
-    isRunning = false;
-    console.log(error);
+    console.error(error);
     await utils.pause(1e3);
   }
-  isRunning = false;
 }
 
-let start = new Date();
-setInterval(async () => {
-  console.log('still running...');
-
-  if (!isRunning) {
-    console.log('search...');
-    start = new Date();
-    isRunning = true;
-    farmersWorldBot();
-  }
-
-  const diff = Math.abs(start - new Date());
-  let second = Math.floor(diff / 1000);
-
-  if (second > 90) {
-    console.log('overtime');
-    isRunning = false;
-    second = 0;
-  }
-}, 10000);
+(async () => {
+  while (true) await farmersWorldBot();
+})();
