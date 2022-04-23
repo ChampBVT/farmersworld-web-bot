@@ -8,13 +8,13 @@ const utils = {
 
 async function farmersWorldBot() {
   try {
-    const autoFillEnergy = 1;
-    const autoRepair = 1;
+    const autoFillEnergy: boolean = true;
+    const autoRepair: boolean = true;
 
-    const repairItem = 50;
-    const energyCondition = 200;
+    const repairItem: number = 50;
+    const energyCondition: number = 200;
 
-    const foodFill = 40;
+    const foodFill: number = 40;
 
     // --------------- Energy ---------------
     if (autoFillEnergy) {
