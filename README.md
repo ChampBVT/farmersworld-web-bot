@@ -12,4 +12,5 @@ Current features
 
 ### HOW TO USE
 
-- Copy `dist/index.js` and paste to the console of the https://play.farmersworld.io/ page (Tools tab)
+- Copy `dist/index.js` [here](https://github.com/ChampBVT/farmersworld-web-bot/blob/main/dist/index.js) and paste to the console of the https://play.farmersworld.io/ page (Tools tab)
+- On the bottom of the code is the config with configurable options
