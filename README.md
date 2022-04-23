@@ -9,3 +9,7 @@ Current features
 - Configurable auto-repair conditions
 - Support auto-refill-energy based on conditions
 - Stored mining for tools with membership
+
+### HOW TO USE
+
+- Copy `dist/index.js` and paste to the console of the https://play.farmersworld.io/ page (Tools tab)
