@@ -1,4 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-yarn lint && yarn tsc -p . && git add dist.js
+yarn lint && yarn tsc -p . && git add dist/
