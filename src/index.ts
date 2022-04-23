@@ -95,13 +95,11 @@ const mine = async () => {
 
 async function farmersWorldBot() {
   try {
-    const autoFillEnergy: boolean = true;
-    const autoRepair: boolean = true;
-
-    const repairItem: number = 50;
-    const energyCondition: number = 200;
-
-    const foodFill: number = 40;
+    const autoFillEnergy: boolean = config.autoFillEnergy;
+    const autoRepair: boolean = config.autoRepair;
+    const repairItem: number = config.repairItem;
+    const energyCondition: number = config.energyCondition;
+    const foodFill: number = config.foodFill;
 
     for (const item of Array.from(
       <NodeListOf<HTMLElement>>document.querySelectorAll('.vertical-carousel-container img'),
@@ -127,3 +125,20 @@ async function farmersWorldBot() {
 (async () => {
   while (true) await farmersWorldBot();
 })();
+
+/**
+ * README: To config edit these values
+ *
+ * autoFillEnergy: Turn on/off auto evergy fill
+ * autoRepair: Turn on/off auto tools repair
+ * repairItem: Condition to start repair (out of 100)
+ * energyCondition: Condition of current energy to fill
+ * foodFill: Amount of food to fill
+ */
+const config = {
+  autoFillEnergy: true,
+  autoRepair: true,
+  repairItem: 50,
+  energyCondition: 200,
+  foodFill: 40,
+};

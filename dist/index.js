@@ -148,11 +148,11 @@ function farmersWorldBot() {
             switch (_b.label) {
                 case 0:
                     _b.trys.push([0, 11, , 13]);
-                    autoFillEnergy = true;
-                    autoRepair = true;
-                    repairItem = 50;
-                    energyCondition = 200;
-                    foodFill = 40;
+                    autoFillEnergy = config.autoFillEnergy;
+                    autoRepair = config.autoRepair;
+                    repairItem = config.repairItem;
+                    energyCondition = config.energyCondition;
+                    foodFill = config.foodFill;
                     _i = 0, _a = Array.from(document.querySelectorAll('.vertical-carousel-container img'));
                     _b.label = 1;
                 case 1:
@@ -209,3 +209,19 @@ function farmersWorldBot() {
         }
     });
 }); })();
+/**
+ * README: To config edit these values
+ *
+ * autoFillEnergy: Turn on/off auto evergy fill
+ * autoRepair: Turn on/off auto tools repair
+ * repairItem: Condition to start repair (out of 100)
+ * energyCondition: Condition of current energy to fill
+ * foodFill: Amount of food to fill
+ */
+var config = {
+    autoFillEnergy: true,
+    autoRepair: true,
+    repairItem: 50,
+    energyCondition: 200,
+    foodFill: 40,
+};
