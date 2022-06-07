@@ -80,7 +80,6 @@ var food = function (_a) {
                     i += 1;
                     return [3 /*break*/, 2];
                 case 5:
-                    console.log('modal-wrapper click');
                     document.querySelector('.modal-wrapper .plain-button').click();
                     return [4 /*yield*/, pause(2e4)];
                 case 6:
@@ -116,32 +115,44 @@ var repair = function (_a) {
         });
     });
 };
-var mine = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var buttonMine, store, d;
-    var _a, _b, _c;
-    return __generator(this, function (_d) {
-        switch (_d.label) {
-            case 0:
-                buttonMine = document.querySelector('.info-section .plain-button');
-                if (!(!__spreadArray([], Array.from((buttonMine === null || buttonMine === void 0 ? void 0 : buttonMine.classList) || []), true).includes('disabled') ||
-                    ['mine', 'claim', 'feed', 'water'].includes(buttonMine === null || buttonMine === void 0 ? void 0 : buttonMine.innerHTML.toLocaleLowerCase()))) return [3 /*break*/, 2];
-                store = document.querySelector('.info-title-level');
-                if (!(((_a = store === null || store === void 0 ? void 0 : store.textContent) === null || _a === void 0 ? void 0 : _a.charAt(2)) === ((_b = store === null || store === void 0 ? void 0 : store.textContent) === null || _b === void 0 ? void 0 : _b.charAt(0)))) return [3 /*break*/, 2];
-                console.log('buttonMine.click()');
-                buttonMine.click();
-                d = new Date();
-                console.log("Mine at ".concat(d.getHours(), ":").concat(d.getMinutes()));
-                return [4 /*yield*/, pause(10000)];
-            case 1:
-                _d.sent();
-                (_c = (document.querySelector('.modal__button-group .plain-button') ||
-                    document.querySelector('.modal-stake .modal-stake-close img'))) === null || _c === void 0 ? void 0 : _c.click();
-                _d.label = 2;
-            case 2: return [2 /*return*/];
-        }
+var mine = function (isMining) {
+    if (isMining === void 0) { isMining = true; }
+    return __awaiter(void 0, void 0, void 0, function () {
+        var buttonMine, store, d;
+        var _a, _b, _c, _d;
+        return __generator(this, function (_e) {
+            switch (_e.label) {
+                case 0:
+                    buttonMine = document.querySelector('.info-section .plain-button');
+                    if (!(!__spreadArray([], Array.from((buttonMine === null || buttonMine === void 0 ? void 0 : buttonMine.classList) || []), true).includes('disabled') ||
+                        ['mine', 'claim', 'feed', 'water', 'hatch'].includes(buttonMine === null || buttonMine === void 0 ? void 0 : buttonMine.innerHTML.toLocaleLowerCase()))) return [3 /*break*/, 2];
+                    store = document.querySelector('.info-title-level');
+                    if (!
+                    // Stacked mining
+                    (((_a = store === null || store === void 0 ? void 0 : store.textContent) === null || _a === void 0 ? void 0 : _a.charAt(2)) === ((_b = store === null || store === void 0 ? void 0 : store.textContent) === null || _b === void 0 ? void 0 : _b.charAt(0)) ||
+                        (
+                        // Plant watering
+                        (_c = store === null || store === void 0 ? void 0 : store.textContent) === null || _c === void 0 ? void 0 : _c.toLowerCase().includes('missed')) ||
+                        // Chicken & Cow feeding
+                        !isMining)) 
+                    // Stacked mining
+                    return [3 /*break*/, 2];
+                    buttonMine.click();
+                    d = new Date();
+                    console.log("Mine at ".concat(d.getHours(), ":").concat(d.getMinutes()));
+                    return [4 /*yield*/, pause(10000)];
+                case 1:
+                    _e.sent();
+                    (_d = (document.querySelector('.modal__button-group .plain-button') ||
+                        document.querySelector('.modal-stake .modal-stake-close img'))) === null || _d === void 0 ? void 0 : _d.click();
+                    _e.label = 2;
+                case 2: return [2 /*return*/];
+            }
+        });
     });
-}); };
-function farmersWorldBot() {
+};
+function farmersWorldBot(isMining) {
+    if (isMining === void 0) { isMining = true; }
     return __awaiter(this, void 0, void 0, function () {
         var autoFillEnergy, autoRepair, repairItem, energyCondition, foodFill, _i, _a, item, error_1;
         return __generator(this, function (_b) {
@@ -168,12 +179,12 @@ function farmersWorldBot() {
                     return [4 /*yield*/, pause(3e3)];
                 case 4:
                     _b.sent();
-                    if (!autoRepair) return [3 /*break*/, 6];
+                    if (!(autoRepair && isMining)) return [3 /*break*/, 6];
                     return [4 /*yield*/, repair({ repairItem: repairItem })];
                 case 5:
                     _b.sent();
                     _b.label = 6;
-                case 6: return [4 /*yield*/, mine()];
+                case 6: return [4 /*yield*/, mine(isMining)];
                 case 7:
                     _b.sent();
                     _b.label = 8;
@@ -197,15 +208,37 @@ function farmersWorldBot() {
     });
 }
 (function () { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var _i, _a, _b, i, mapItem, mapBtn;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0:
-                if (!true) return [3 /*break*/, 2];
-                return [4 /*yield*/, farmersWorldBot()];
+                if (!true) return [3 /*break*/, 8];
+                _i = 0, _a = Array.from(['mine', 'chicken', 'plant', 'cow'].entries());
+                _c.label = 1;
             case 1:
-                _a.sent();
-                return [3 /*break*/, 0];
-            case 2: return [2 /*return*/];
+                if (!(_i < _a.length)) return [3 /*break*/, 7];
+                _b = _a[_i], i = _b[0], mapItem = _b[1];
+                mapBtn = (document.getElementsByClassName('navbar-container')[0].childNodes[4]);
+                mapBtn.click();
+                return [4 /*yield*/, pause(3e3)];
+            case 2:
+                _c.sent();
+                (document.getElementsByClassName('modal-map-content')[0].childNodes[i].childNodes[0]).click();
+                return [4 /*yield*/, pause(3e3)];
+            case 3:
+                _c.sent();
+                return [4 /*yield*/, farmersWorldBot(mapItem === 'mine')];
+            case 4:
+                _c.sent();
+                return [4 /*yield*/, pause(3e3)];
+            case 5:
+                _c.sent();
+                _c.label = 6;
+            case 6:
+                _i++;
+                return [3 /*break*/, 1];
+            case 7: return [3 /*break*/, 0];
+            case 8: return [2 /*return*/];
         }
     });
 }); })();
