@@ -16,4 +16,3 @@ Current features
 - On the bottom of the code is the config with configurable options
 
 ![code](https://user-images.githubusercontent.com/38002951/164886224-1fb191d2-79b5-4365-b530-7c1d46c82ccb.png)
-
