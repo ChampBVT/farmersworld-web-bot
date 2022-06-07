@@ -36,7 +36,6 @@ const food = async ({ energyCondition, foodFill }: IFood) => {
       await pause(200);
     }
 
-    console.log('modal-wrapper click');
     (<HTMLElement>document.querySelector('.modal-wrapper .plain-button')).click();
 
     await pause(2e4);
@@ -65,18 +64,22 @@ const repair = async ({ repairItem }: IRepair) => {
   }
 };
 
-const mine = async () => {
+const mine = async (isMining = true) => {
   const buttonMine = <HTMLElement>document.querySelector('.info-section .plain-button');
 
   if (
     ![...Array.from(buttonMine?.classList || [])].includes('disabled') ||
-    ['mine', 'claim', 'feed', 'water'].includes(buttonMine?.innerHTML.toLocaleLowerCase())
+    ['mine', 'claim', 'feed', 'water', 'hatch'].includes(buttonMine?.innerHTML.toLocaleLowerCase())
   ) {
     const store = document.querySelector('.info-title-level');
-
-    if (store?.textContent?.charAt(2) === store?.textContent?.charAt(0)) {
-      console.log('buttonMine.click()');
-
+    if (
+      // Stacked mining
+      store?.textContent?.charAt(2) === store?.textContent?.charAt(0) ||
+      // Plant watering
+      store?.textContent?.toLowerCase().includes('missed') ||
+      // Chicken & Cow feeding
+      !isMining
+    ) {
       buttonMine.click();
 
       const d = new Date();
@@ -92,8 +95,7 @@ const mine = async () => {
     }
   }
 };
-
-async function farmersWorldBot() {
+async function farmersWorldBot(isMining = true) {
   try {
     const autoFillEnergy: boolean = config.autoFillEnergy;
     const autoRepair: boolean = config.autoRepair;
@@ -110,9 +112,9 @@ async function farmersWorldBot() {
 
       await pause(3e3);
 
-      if (autoRepair) await repair({ repairItem });
+      if (autoRepair && isMining) await repair({ repairItem });
 
-      await mine();
+      await mine(isMining);
     }
 
     await pause(1e3);
@@ -123,7 +125,27 @@ async function farmersWorldBot() {
 }
 
 (async () => {
-  while (true) await farmersWorldBot();
+  while (true) {
+    for (const [i, mapItem] of Array.from(['mine', 'chicken', 'plant', 'cow'].entries())) {
+      const mapBtn = <HTMLElement>(
+        document.getElementsByClassName('navbar-container')[0].childNodes[4]
+      );
+
+      mapBtn.click();
+
+      await pause(3e3);
+
+      (<HTMLElement>(
+        document.getElementsByClassName('modal-map-content')[0].childNodes[i].childNodes[0]
+      )).click();
+
+      await pause(3e3);
+
+      await farmersWorldBot(mapItem === 'mine');
+
+      await pause(3e3);
+    }
+  }
 })();
 
 /**

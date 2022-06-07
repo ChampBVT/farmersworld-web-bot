@@ -6,7 +6,8 @@
   "license": "MIT",
   "scripts": {
     "lint": "yarn eslint . --fix && yarn prettier . --write",
-    "build": "yarn tsc -p ."
+    "build": "yarn tsc -p .",
+    "dev": "yarn tsc -w"
   },
   "devDependencies": {
     "eslint": "^8.11.0",
