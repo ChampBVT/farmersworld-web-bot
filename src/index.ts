@@ -64,7 +64,7 @@ const repair = async ({ repairItem }: IRepair) => {
   }
 };
 
-const mine = async (isMining = true) => {
+const mine = async (isMine = true) => {
   const buttonMine = <HTMLElement>document.querySelector('.info-section .plain-button');
 
   if (
@@ -78,7 +78,7 @@ const mine = async (isMining = true) => {
       // Plant watering
       store?.textContent?.toLowerCase().includes('missed') ||
       // Chicken & Cow feeding
-      !isMining
+      !isMine
     ) {
       buttonMine.click();
 
@@ -95,7 +95,9 @@ const mine = async (isMining = true) => {
     }
   }
 };
-async function farmersWorldBot(isMining = true) {
+async function farmersWorldBot(isMine = true) {
+  const config = getConfig();
+
   try {
     const autoFillEnergy: boolean = config.autoFillEnergy;
     const autoRepair: boolean = config.autoRepair;
@@ -112,9 +114,9 @@ async function farmersWorldBot(isMining = true) {
 
       await pause(3e3);
 
-      if (autoRepair && isMining) await repair({ repairItem });
+      if (autoRepair && isMine) await repair({ repairItem });
 
-      await mine(isMining);
+      await mine(isMine);
     }
 
     await pause(1e3);
@@ -124,9 +126,18 @@ async function farmersWorldBot(isMining = true) {
   }
 }
 
+const mapIndex: Record<string, number> = {
+  mine: 1,
+  chicken: 2,
+  plant: 3,
+  cow: 4,
+};
+
 (async () => {
   while (true) {
-    for (const [i, mapItem] of Array.from(['mine', 'chicken', 'plant', 'cow'].entries())) {
+    for (const [mapItem, enabled] of Object.entries(getConfig())) {
+      if (!enabled) return;
+
       const mapBtn = <HTMLElement>(
         document.getElementsByClassName('navbar-container')[0].childNodes[4]
       );
@@ -136,17 +147,32 @@ async function farmersWorldBot(isMining = true) {
       await pause(3e3);
 
       (<HTMLElement>(
-        document.getElementsByClassName('modal-map-content')[0].childNodes[i].childNodes[0]
+        document.getElementsByClassName('modal-map-content')[0].childNodes[mapIndex[mapItem]]
+          .childNodes[0]
       )).click();
 
       await pause(3e3);
 
-      await farmersWorldBot(mapItem === 'mine');
+      await farmersWorldBot(mapIndex[mapItem] === 1);
 
       await pause(3e3);
     }
   }
 })();
+
+interface IGetConfig {
+  maps: {
+    mine: boolean;
+    chicken: boolean;
+    plant: boolean;
+    cow: boolean;
+  };
+  autoFillEnergy: boolean;
+  autoRepair: boolean;
+  repairItem: number;
+  energyCondition: number;
+  foodFill: number;
+}
 
 /**
  * README: To config edit these values
@@ -157,10 +183,18 @@ async function farmersWorldBot(isMining = true) {
  * energyCondition: Condition of current energy to fill
  * foodFill: Amount of food to fill
  */
-const config = {
-  autoFillEnergy: true,
-  autoRepair: true,
-  repairItem: 50,
-  energyCondition: 200,
-  foodFill: 40,
-};
+function getConfig(): IGetConfig {
+  return {
+    maps: {
+      mine: true,
+      chicken: true,
+      plant: true,
+      cow: true,
+    },
+    autoFillEnergy: true,
+    autoRepair: true,
+    repairItem: 50,
+    energyCondition: 200,
+    foodFill: 40,
+  };
+}
