@@ -115,8 +115,8 @@ var repair = function (_a) {
         });
     });
 };
-var mine = function (isMining) {
-    if (isMining === void 0) { isMining = true; }
+var mine = function (isMine) {
+    if (isMine === void 0) { isMine = true; }
     return __awaiter(void 0, void 0, void 0, function () {
         var buttonMine, store, d;
         var _a, _b, _c, _d;
@@ -134,7 +134,7 @@ var mine = function (isMining) {
                         // Plant watering
                         (_c = store === null || store === void 0 ? void 0 : store.textContent) === null || _c === void 0 ? void 0 : _c.toLowerCase().includes('missed')) ||
                         // Chicken & Cow feeding
-                        !isMining)) 
+                        !isMine)) 
                     // Stacked mining
                     return [3 /*break*/, 2];
                     buttonMine.click();
@@ -151,83 +151,95 @@ var mine = function (isMining) {
         });
     });
 };
-function farmersWorldBot(isMining) {
-    if (isMining === void 0) { isMining = true; }
+function farmersWorldBot(isMine) {
+    if (isMine === void 0) { isMine = true; }
     return __awaiter(this, void 0, void 0, function () {
-        var autoFillEnergy, autoRepair, repairItem, energyCondition, foodFill, _i, _a, item, error_1;
+        var config, autoFillEnergy, autoRepair, repairItem, energyCondition, foodFill, _i, _a, item, error_1;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    _b.trys.push([0, 11, , 13]);
+                    config = getConfig();
+                    _b.label = 1;
+                case 1:
+                    _b.trys.push([1, 12, , 14]);
                     autoFillEnergy = config.autoFillEnergy;
                     autoRepair = config.autoRepair;
                     repairItem = config.repairItem;
                     energyCondition = config.energyCondition;
                     foodFill = config.foodFill;
                     _i = 0, _a = Array.from(document.querySelectorAll('.vertical-carousel-container img'));
-                    _b.label = 1;
-                case 1:
-                    if (!(_i < _a.length)) return [3 /*break*/, 9];
-                    item = _a[_i];
-                    if (!autoFillEnergy) return [3 /*break*/, 3];
-                    return [4 /*yield*/, food({ energyCondition: energyCondition, foodFill: foodFill })];
+                    _b.label = 2;
                 case 2:
-                    _b.sent();
-                    _b.label = 3;
+                    if (!(_i < _a.length)) return [3 /*break*/, 10];
+                    item = _a[_i];
+                    if (!autoFillEnergy) return [3 /*break*/, 4];
+                    return [4 /*yield*/, food({ energyCondition: energyCondition, foodFill: foodFill })];
                 case 3:
+                    _b.sent();
+                    _b.label = 4;
+                case 4:
                     item.click();
                     return [4 /*yield*/, pause(3e3)];
-                case 4:
-                    _b.sent();
-                    if (!(autoRepair && isMining)) return [3 /*break*/, 6];
-                    return [4 /*yield*/, repair({ repairItem: repairItem })];
                 case 5:
                     _b.sent();
-                    _b.label = 6;
-                case 6: return [4 /*yield*/, mine(isMining)];
-                case 7:
+                    if (!(autoRepair && isMine)) return [3 /*break*/, 7];
+                    return [4 /*yield*/, repair({ repairItem: repairItem })];
+                case 6:
                     _b.sent();
-                    _b.label = 8;
+                    _b.label = 7;
+                case 7: return [4 /*yield*/, mine(isMine)];
                 case 8:
-                    _i++;
-                    return [3 /*break*/, 1];
-                case 9: return [4 /*yield*/, pause(1e3)];
-                case 10:
                     _b.sent();
-                    return [3 /*break*/, 13];
+                    _b.label = 9;
+                case 9:
+                    _i++;
+                    return [3 /*break*/, 2];
+                case 10: return [4 /*yield*/, pause(1e3)];
                 case 11:
+                    _b.sent();
+                    return [3 /*break*/, 14];
+                case 12:
                     error_1 = _b.sent();
                     console.error(error_1);
                     return [4 /*yield*/, pause(1e3)];
-                case 12:
+                case 13:
                     _b.sent();
-                    return [3 /*break*/, 13];
-                case 13: return [2 /*return*/];
+                    return [3 /*break*/, 14];
+                case 14: return [2 /*return*/];
             }
         });
     });
 }
+var mapIndex = {
+    mine: 1,
+    chicken: 2,
+    plant: 3,
+    cow: 4,
+};
 (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var _i, _a, _b, i, mapItem, mapBtn;
+    var _i, _a, _b, mapItem, enabled, mapBtn;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
                 if (!true) return [3 /*break*/, 8];
-                _i = 0, _a = Array.from(['mine', 'chicken', 'plant', 'cow'].entries());
+                _i = 0, _a = Object.entries(getConfig());
                 _c.label = 1;
             case 1:
                 if (!(_i < _a.length)) return [3 /*break*/, 7];
-                _b = _a[_i], i = _b[0], mapItem = _b[1];
+                _b = _a[_i], mapItem = _b[0], enabled = _b[1];
+                if (!enabled)
+                    return [2 /*return*/];
                 mapBtn = (document.getElementsByClassName('navbar-container')[0].childNodes[4]);
                 mapBtn.click();
                 return [4 /*yield*/, pause(3e3)];
             case 2:
                 _c.sent();
-                (document.getElementsByClassName('modal-map-content')[0].childNodes[i].childNodes[0]).click();
+                (document.getElementsByClassName('modal-map-content')[0].childNodes[mapIndex[mapItem]]
+                    .childNodes[0]).click();
                 return [4 /*yield*/, pause(3e3)];
             case 3:
                 _c.sent();
-                return [4 /*yield*/, farmersWorldBot(mapItem === 'mine')];
+                return [4 /*yield*/, farmersWorldBot(mapIndex[mapItem] === 1)];
             case 4:
                 _c.sent();
                 return [4 /*yield*/, pause(3e3)];
@@ -251,10 +263,18 @@ function farmersWorldBot(isMining) {
  * energyCondition: Condition of current energy to fill
  * foodFill: Amount of food to fill
  */
-var config = {
-    autoFillEnergy: true,
-    autoRepair: true,
-    repairItem: 50,
-    energyCondition: 200,
-    foodFill: 40,
-};
+function getConfig() {
+    return {
+        maps: {
+            mine: true,
+            chicken: true,
+            plant: true,
+            cow: true,
+        },
+        autoFillEnergy: true,
+        autoRepair: true,
+        repairItem: 50,
+        energyCondition: 200,
+        foodFill: 40,
+    };
+}
