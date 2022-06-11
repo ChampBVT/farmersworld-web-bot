@@ -127,10 +127,10 @@ async function farmersWorldBot(isMine = true) {
 }
 
 const mapIndex: Record<string, number> = {
-  mine: 1,
-  chicken: 2,
-  plant: 3,
-  cow: 4,
+  mine: 0,
+  chicken: 1,
+  plant: 2,
+  cow: 3,
 };
 
 (async () => {
@@ -153,7 +153,7 @@ const mapIndex: Record<string, number> = {
 
       await pause(3e3);
 
-      await farmersWorldBot(mapIndex[mapItem] === 1);
+      await farmersWorldBot(mapIndex[mapItem] === 0);
 
       await pause(3e3);
     }

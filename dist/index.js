@@ -211,10 +211,10 @@ function farmersWorldBot(isMine) {
     });
 }
 var mapIndex = {
-    mine: 1,
-    chicken: 2,
-    plant: 3,
-    cow: 4,
+    mine: 0,
+    chicken: 1,
+    plant: 2,
+    cow: 3,
 };
 (function () { return __awaiter(void 0, void 0, void 0, function () {
     var _i, _a, _b, mapItem, enabled, mapBtn;
@@ -239,7 +239,7 @@ var mapIndex = {
                 return [4 /*yield*/, pause(3e3)];
             case 3:
                 _c.sent();
-                return [4 /*yield*/, farmersWorldBot(mapIndex[mapItem] === 1)];
+                return [4 /*yield*/, farmersWorldBot(mapIndex[mapItem] === 0)];
             case 4:
                 _c.sent();
                 return [4 /*yield*/, pause(3e3)];
