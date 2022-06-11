@@ -222,7 +222,7 @@ var mapIndex = {
         switch (_c.label) {
             case 0:
                 if (!true) return [3 /*break*/, 8];
-                _i = 0, _a = Object.entries(getConfig());
+                _i = 0, _a = Object.entries(getConfig().maps);
                 _c.label = 1;
             case 1:
                 if (!(_i < _a.length)) return [3 /*break*/, 7];

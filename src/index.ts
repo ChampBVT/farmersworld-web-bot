@@ -135,7 +135,7 @@ const mapIndex: Record<string, number> = {
 
 (async () => {
   while (true) {
-    for (const [mapItem, enabled] of Object.entries(getConfig())) {
+    for (const [mapItem, enabled] of Object.entries(getConfig().maps)) {
       if (!enabled) return;
 
       const mapBtn = <HTMLElement>(
