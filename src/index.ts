@@ -33,7 +33,7 @@ const food = async ({ energyCondition, foodFill }: IFood) => {
     for (let i = 0; i < foodsToAdd; i += 1) {
       console.log('energy click');
       (<HTMLElement>document.querySelector("img.image-button[alt='Plus Icon']"))?.click();
-      await pause(200);
+      await pause(75);
     }
 
     (<HTMLElement>document.querySelector('.modal-wrapper .plain-button')).click();
@@ -136,20 +136,23 @@ const mapIndex: Record<string, number> = {
 (async () => {
   while (true) {
     for (const [mapItem, enabled] of Object.entries(getConfig().maps)) {
-      if (!enabled) return;
+      if (!enabled) continue;
 
-      const mapBtn = <HTMLElement>(
-        document.getElementsByClassName('navbar-container')[0].childNodes[4]
-      );
+      const mapBtn = document.getElementsByClassName('navbar-container')[0]
+        .children[4] as HTMLElement;
 
-      mapBtn.click();
+      if (!Array.from(mapBtn.classList).includes('active')) mapBtn.click();
 
       await pause(3e3);
 
-      (<HTMLElement>(
-        document.getElementsByClassName('modal-map-content')[0].childNodes[mapIndex[mapItem]]
-          .childNodes[0]
-      )).click();
+      const mapItemButton = document.getElementsByClassName('modal-map-content')[0].children[
+        mapIndex[mapItem]
+      ].children[0] as HTMLElement;
+
+      // Skip if the map is greyed out
+      if (mapItemButton.style.filter === 'grayscale(1)') continue;
+
+      mapItemButton.click();
 
       await pause(3e3);
 

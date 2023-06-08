@@ -72,7 +72,7 @@ var food = function (_a) {
                     if (!(i < foodsToAdd)) return [3 /*break*/, 5];
                     console.log('energy click');
                     (_d = document.querySelector("img.image-button[alt='Plus Icon']")) === null || _d === void 0 ? void 0 : _d.click();
-                    return [4 /*yield*/, pause(200)];
+                    return [4 /*yield*/, pause(75)];
                 case 3:
                     _e.sent();
                     _e.label = 4;
@@ -217,7 +217,7 @@ var mapIndex = {
     cow: 3,
 };
 (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var _i, _a, _b, mapItem, enabled, mapBtn;
+    var _i, _a, _b, mapItem, enabled, mapBtn, mapItemButton;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
@@ -228,14 +228,19 @@ var mapIndex = {
                 if (!(_i < _a.length)) return [3 /*break*/, 7];
                 _b = _a[_i], mapItem = _b[0], enabled = _b[1];
                 if (!enabled)
-                    return [2 /*return*/];
-                mapBtn = (document.getElementsByClassName('navbar-container')[0].childNodes[4]);
-                mapBtn.click();
+                    return [3 /*break*/, 6];
+                mapBtn = document.getElementsByClassName('navbar-container')[0]
+                    .children[4];
+                if (!Array.from(mapBtn.classList).includes('active'))
+                    mapBtn.click();
                 return [4 /*yield*/, pause(3e3)];
             case 2:
                 _c.sent();
-                (document.getElementsByClassName('modal-map-content')[0].childNodes[mapIndex[mapItem]]
-                    .childNodes[0]).click();
+                mapItemButton = document.getElementsByClassName('modal-map-content')[0].children[mapIndex[mapItem]].children[0];
+                // Skip if the map is greyed out
+                if (mapItemButton.style.filter === 'grayscale(1)')
+                    return [3 /*break*/, 6];
+                mapItemButton.click();
                 return [4 /*yield*/, pause(3e3)];
             case 3:
                 _c.sent();
