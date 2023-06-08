@@ -136,29 +136,34 @@ const mapIndex: Record<string, number> = {
 (async () => {
   while (true) {
     for (const [mapItem, enabled] of Object.entries(getConfig().maps)) {
-      if (!enabled) continue;
+      try {
+        if (!enabled) continue;
 
-      const mapBtn = document.getElementsByClassName('navbar-container')[0]
-        .children[4] as HTMLElement;
+        const mapBtn = document.getElementsByClassName('navbar-container')[0]
+          .children[4] as HTMLElement;
 
-      if (!Array.from(mapBtn.classList).includes('active')) mapBtn.click();
+        if (!Array.from(mapBtn.classList).includes('active')) mapBtn.click();
 
-      await pause(3e3);
+        await pause(3e3);
 
-      const mapItemButton = document.getElementsByClassName('modal-map-content')[0].children[
-        mapIndex[mapItem]
-      ].children[0] as HTMLElement;
+        const mapItemButton = document.getElementsByClassName('modal-map-content')[0].children[
+          mapIndex[mapItem]
+        ].children[0] as HTMLElement;
 
-      // Skip if the map is greyed out
-      if (mapItemButton.style.filter === 'grayscale(1)') continue;
+        // Skip if the map is greyed out
+        if (mapItemButton.style.filter === 'grayscale(1)') continue;
 
-      mapItemButton.click();
+        mapItemButton.click();
 
-      await pause(3e3);
+        await pause(3e3);
 
-      await farmersWorldBot(mapIndex[mapItem] === 0);
+        await farmersWorldBot(mapIndex[mapItem] === 0);
 
-      await pause(3e3);
+        await pause(3e3);
+      } catch (e) {
+        console.error(e);
+        continue;
+      }
     }
   }
 })();
